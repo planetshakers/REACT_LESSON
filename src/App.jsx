@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint react-hooks/exhaustive-deps: off  */
+import React, { useEffect, useState } from "react";
 import ColorfulMessage from "./components/colorfulMessage";
 
 const App = () => {
@@ -14,15 +15,21 @@ const App = () => {
     setNum(num + 1);
   };
 
-  if (num > 0) {
-    if (num % 3 === 0) {
-      // 左がfalseのときだけ右を返す
-      faceShowFlag || setFaceShowFlag(true);
-    } else {
-      // 右がtrueのときだけ左を返す
-      faceShowFlag && setFaceShowFlag(false);
+  // Reactではステートが変わる度に、再レンダリングされる
+  // useEffect関数は第２引数に配列を取ることができる
+  // このコンポーネントで処理を一回だけしたい時に使える
+  // ステートが変わる度に毎回情報を取ってくるのは大変
+  useEffect(() => {
+    if (num > 0) {
+      if (num % 3 === 0) {
+        // 左がfalseのときだけ右を返す
+        faceShowFlag || setFaceShowFlag(true);
+      } else {
+        // 右がtrueのときだけ左を返す
+        faceShowFlag && setFaceShowFlag(false);
+      }
     }
-  }
+  }, [num]);
 
   return (
     <>
